@@ -1,0 +1,73 @@
+{
+    "name": "vscode-tiaportal-mcp",
+    "author": {
+        "name": "j.heilingbrunner",
+        "email": "j.heilingbrunner@gmail.com"
+    },
+    "publisher": "JHeilingbrunner",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/heilingbrunner/vscode-tiaportal-mcp.git"},
+    "displayName": "TIA-Portal MCP-Server",
+    "description": "MCP stuff for Siemens TIA-Portal",
+    "icon": "assets/vscode-tiaportal-mcp-logo.png",
+    "version": "0.0.3",
+    "engines": {
+        "vscode": "^1.100.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "keywords": [
+        "vscode",
+        "tia-portal",
+        "mcp",
+        "siemens",
+        "language-model-tools"
+    ],
+    "activationEvents": [
+        "onStartupFinished",
+        "onWorkspaceContains:.vscode"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "vscode-tiaportal-mcp.AddServerConfiguration",
+                "title": "Add MCP Server Configuration",
+                "category": "TIA Portal"
+            },
+            {
+                "command": "vscode-tiaportal-mcp.RemoveServerConfiguration",
+                "title": "Remove MCP Server Configuration",
+                "category": "TIA Portal"
+            }
+        ]
+    },
+    "scripts": {
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "esbuild": "npm run esbuild-base -- --sourcemap",
+        "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+        "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+        "esbuild-prepublish": "npm run esbuild-base -- --minify",
+        "prev-vscode:prepublish": "npm run compile",
+        "quality-lint": "eslint -c .eslintrc.js --ext .ts ./src",
+        "vsce-package": "npx vsce package",
+        "vscode:prepublish": "npm run esbuild-prepublish -- --minify"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.100.0",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "20.x",
+        "@typescript-eslint/eslint-plugin": "^8.31.1",
+        "@typescript-eslint/parser": "^8.31.1",
+        "eslint": "^9.25.1",
+        "esbuild": "^0.25.3",
+        "npm-run-all": "^4.1.5",
+        "typescript": "^5.8.3",
+        "@vscode/test-cli": "^0.0.10",
+        "@vscode/test-electron": "^2.5.2",
+        "@vscode/vsce": "^3.4.2"
+    }
+}
