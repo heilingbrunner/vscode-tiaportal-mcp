@@ -22,6 +22,7 @@
         "vscode",
         "tia-portal",
         "mcp",
+        "model-context-protocol",
         "siemens",
         "language-model-tools"
     ],
