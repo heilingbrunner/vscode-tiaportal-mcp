@@ -2,6 +2,9 @@
 
 ![vscode-tiaportal-mcp-logo](https://raw.githubusercontent.com/heilingbrunner/vscode-tiaportal-mcp/master/assets/vscode-tiaportal-mcp-logo.png)
 
+![License](https://img.shields.io/github/license/heilingbrunner/vscode-tiaportal-mcp.svg?style=flat)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/JHeilingbrunner.vscode-tiaportal-mcp.svg?label=Version&style=flat)](https://marketplace.visualstudio.com/items?itemName=JHeilingbrunner.vscode-tiaportal-mcp)
+
 A Visual Studio Code extension to connect to Siemens TIA Portal and interact with TIA Portal projects directly from VS Code with GitHub Copilot.
 
 ## MCP-Server
