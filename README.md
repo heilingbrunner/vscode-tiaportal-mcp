@@ -1,5 +1,7 @@
 # TIA-Portal MCP-Server
 
+![vscode-tiaportal-mcp-logo](https://raw.githubusercontent.com/heilingbrunner/vscode-tiaportal-mcp/master/assets/vscode-tiaportal-mcp-logo.png)
+
 A Visual Studio Code extension to connect to Siemens TIA Portal and interact with TIA Portal projects directly from VS Code with GitHub Copilot.
 
 ## MCP-Server
@@ -17,7 +19,10 @@ A Visual Studio Code extension to connect to Siemens TIA Portal and interact wit
 - __.net Framework 4.8__ installed
 - __Siemens TIA Portal V20__ installed and running on your machine
 - Check if under `Environment Variables/User variable for user <name>` the variable `TiaPortalLocation` is set to `C:\Program Files\Siemens\Automation\Portal V20`
+  ![Environment-TiaPortalLocation](https://raw.githubusercontent.com/heilingbrunner/vscode-tiaportal-mcp/master/assets/Environment-TiaPortalLocation.png)
 - User must be in Windows User Group `Siemens TIA Openness`
+  ![Windows-User-Group-Siemens-Tia-Openness](https://raw.githubusercontent.com/heilingbrunner/vscode-tiaportal-mcp/master/assets/Windows-User-Group-Siemens-Tia-Openness.png)
+
 
 ## Usage
 
