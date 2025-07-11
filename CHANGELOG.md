@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.0.5] - 2025-07-11
+
+- locating of plc software by softwarePath. This makes it possible to access plc software in groups/subgroups
+- new tool: retrieving of project structure as text
+- new tool: compile plc software
+
 ## [0.0.4] - 2025-06-30
 
 - opens local session or projects, depending on project file extension
