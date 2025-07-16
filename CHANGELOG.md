@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.0.6] - 2025-07-16
+
+- refactored code to use new TIA Portal API
+- only blocks (OB/FB/FC/DB) and types (UDT) are now retrieved from the PLC software
+- use regex to filter blocks and types
+- import of blocks and types to PLC software
+
 ## [0.0.5] - 2025-07-11
 
 - locating of plc software by softwarePath. This makes it possible to access plc software in groups/subgroups

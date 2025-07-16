@@ -14,11 +14,15 @@ Chat:
 
 ```
 Do the following steps:
-- Connect to tia portal and open project from 'D:/Temp/TestProject1.als20'
-- Give me the structure of the project as markdown with the exact words
-- Compile the software located at 'PC-System_1/Software PLC_1'
-- Delete all files and folders in 'workspacefolder/TestProject1' when already exists
-- Export all code blocks, data blocks and user defined type to 'workspacefolder/TestProject1' from plc software 'PC-System_1/Software PLC_1'
+1. Connect to tia portal and open project from 'D:/Temp/TestProject1.als20'
+2. Compile the plc software 'PC-System_1/Software PLC_1'. When no errors are found continue with the next steps
+3. Save the project
+4. Give me the structure of the project as markdown with the exact words
+5. Delete all files and folders in 'workspacefolder/Export' when already exists
+6. Export all blocks from plc software 'PC-System_1/Software PLC_1' to 'workspacefolder/Export'
+7. Export all types from plc software 'PC-System_1/Software PLC_1' to 'workspacefolder/Export'
+8. Close the project
+9. Disconnect from tia portal
 ```
 ## MCP-Server
 
