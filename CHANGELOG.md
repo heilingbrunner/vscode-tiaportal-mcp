@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.7] - 2025-07-xx
+
+- update `mcp.json` entry to use current installed version of TIA Portal MCP server from this extension
+
 ## [0.0.6] - 2025-07-16
 
 - refactored code to use new TIA Portal API

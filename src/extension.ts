@@ -11,7 +11,7 @@ interface McpServerConfig {
 }
 
 // Export for use in other modules
-export { updateMcpConfig, removeMcpConfig };
+export { addMcpConfig as updateMcpConfig, removeMcpConfig };
 
 
 interface McpConfig {
@@ -29,9 +29,9 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vscode-tiaportal-mcp" is now active!');
 
     const disposableAddServerConfiguration = vscode.commands.registerCommand('vscode-tiaportal-mcp.AddServerConfiguration', () => {
-        
+
         try {
-            updateMcpConfig(serverPath);
+            addMcpConfig(serverPath);
 
             console.log('TIA Portal MCP server added to configuration');
         } catch (error) {
@@ -55,28 +55,15 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(disposableAddServerConfiguration);
     context.subscriptions.push(disposableRemoveServerConfiguration);
+
+    updateMcpConfigIfExists(serverPath);
 }
 
 export function deactivate() {
     console.log('MCP server extension is being deactivated...');
-
-    // Remove from mcp.json
-    // try {
-    //     // Remove MCP server from configuration
-    //     removeMcpConfig();
-    //     console.log('MCP server removed from configuration');
-    // } catch (error) {
-    //     console.error('Error removing MCP server:', error);
-    // }
-
-    // // Stop MCP server if running
-    // if (mcpServerProcess && !mcpServerProcess.killed) {
-    //     mcpServerProcess.kill();
-    //     console.log('MCP server process stopped');
-    // }
 }
 
-function updateMcpConfig(serverPath: string): void {
+function addMcpConfig(serverPath: string): void {
 
     if (process.platform !== 'win32') {
         return; // Nothing to do on other platforms
@@ -100,11 +87,17 @@ function updateMcpConfig(serverPath: string): void {
     // Load existing configuration if present
     if (fs.existsSync(mcpConfigPath)) {
         try {
+
             const configContent: string = fs.readFileSync(mcpConfigPath, 'utf8');
+
             mcpConfig = JSON.parse(configContent) as McpConfig;
+
         } catch (error: any) {
+
             console.warn('Error reading existing MCP configuration:', error);
+
             mcpConfig = { servers: {} };
+
         }
     }
 
@@ -125,11 +118,82 @@ function updateMcpConfig(serverPath: string): void {
     // Write configuration back
     // C:\Users\<user>\AppData\Roaming\Code\User\mcp.json
     try {
+
         fs.writeFileSync(mcpConfigPath, JSON.stringify(mcpConfig, null, 2), 'utf8');
+
         console.log(`MCP server "${serverName}" successfully configured in: ${mcpConfigPath}`);
+
     } catch (error: any) {
+
         console.error('Error writing MCP configuration:', error);
+
         throw error;
+
+    }
+}
+
+function updateMcpConfigIfExists(serverPath: string): void {
+
+    if (process.platform !== 'win32') {
+        return; // Nothing to do on other platforms
+    }
+
+    // VSCode workspace-specific config path
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+    if (!workspaceFolder) {
+
+        throw new Error('No workspace folder found.');
+
+    }
+
+    const vscodeDir = path.join(workspaceFolder, '.vscode');
+    const mcpConfigPath = path.join(vscodeDir, 'mcp.json');
+
+    // Ensure the directory exists
+    if (!fs.existsSync(vscodeDir)) {
+        fs.mkdirSync(vscodeDir, { recursive: true });
+    }
+
+    let mcpConfig: McpConfig = { servers: {} };
+
+    // Load existing configuration if present
+    if (fs.existsSync(mcpConfigPath)) {
+        try {
+
+            const configContent: string = fs.readFileSync(mcpConfigPath, 'utf8');
+
+            mcpConfig = JSON.parse(configContent) as McpConfig;
+
+        } catch (error: any) {
+
+            console.warn('Error reading existing MCP configuration:', error);
+
+            mcpConfig = { servers: {} };
+
+        }
+    }
+
+    // if 'vscode-tiaportal-mcp' already exists, update to correct version
+    const serverName: string = 'vscode-tiaportal-mcp'; // Adjust to your server name
+    if (mcpConfig.servers[serverName]) {
+        mcpConfig.servers[serverName].command = serverPath;
+        mcpConfig.servers[serverName].args = [];
+        mcpConfig.servers[serverName].env = {};
+
+        // Write configuration back
+        // C:\Users\<user>\AppData\Roaming\Code\User\mcp.json
+        try {
+
+            fs.writeFileSync(mcpConfigPath, JSON.stringify(mcpConfig, null, 2), 'utf8');
+
+            console.log(`MCP server "${serverName}" successfully configured in: ${mcpConfigPath}`);
+
+        } catch (error: any) {
+
+            console.error('Error writing MCP configuration:', error);
+
+            throw error;
+        }
     }
 }
 
@@ -158,7 +222,9 @@ function removeMcpConfig(): void {
 
         if (mcpConfig.servers && mcpConfig.servers['vscode-tiaportal-mcp']) {
             delete mcpConfig.servers['vscode-tiaportal-mcp'];
+
             fs.writeFileSync(mcpConfigPath, JSON.stringify(mcpConfig, null, 2), 'utf8');
+
             console.log('MCP server removed from configuration');
         }
     } catch (error: any) {
@@ -186,11 +252,6 @@ export function startMcpServer(serverPath: string) {
                 console.error(`[MCP Server stderr]: ${data}`);
             });
         }
-
-        // Beispiel: Sende Testdaten an den Server (falls benötigt)
-        // if (mcpServerProcess.stdin) {
-        //     mcpServerProcess.stdin.write('Hello MCP Server!\n');
-        // }
 
         if (mcpServerProcess.pid && !mcpServerProcess.killed) {
             console.log('MCP server started successfully. PID:', mcpServerProcess.pid);
