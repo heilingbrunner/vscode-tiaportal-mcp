@@ -1,6 +1,11 @@
 # Change Log
 
-## [0.0.7] - 2025-07-xx
+## [0.0.8] - 2025-08-01
+
+- improved jsonrpc responses
+- updated dependencies
+
+## [0.0.7] - 2025-07-18
 
 - update `mcp.json` entry to use current installed version of TIA Portal MCP server from this extension
 
