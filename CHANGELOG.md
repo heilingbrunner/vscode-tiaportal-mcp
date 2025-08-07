@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.11] - 2025-08-07
+
+- project structure formatted as markdown code
+
 ## [0.0.10] - 2025-08-07
 
 - tool responses improved
