@@ -8,6 +8,14 @@
 
 A Visual Studio Code extension to connect to Siemens TIA Portal and interact with TIA Portal projects directly from VS Code with GitHub Copilot.
 
+## Requirements
+
+- __Siemens TIA Portal V20__ installed and running on your machine
+- __Siemens.Openness__ installed
+- __net Framework 4.8__ installed
+- __Visual Studio Code__ installed
+- __GitHub Copilot__ in Visual Studio Code installed and configured (check: `Chat > Mcp: Enabled`)
+
 ## Chat Examples
 
 Chat:
