@@ -18,20 +18,32 @@ A Visual Studio Code extension to connect to Siemens TIA Portal and interact wit
 
 ## Chat Examples
 
-Chat:
 
 ```
 Do the following steps:
-1. Connect to tia portal and open project from 'D:/Temp/TestProject1.als20'
-2. Compile the plc software 'PC-System_1/Software PLC_1'. When no errors are found continue with the next steps
-3. Save the project
-4. Give me the structure of the project as markdown with the exact words
-5. Delete all files and folders in 'workspacefolder/Export' when already exists
-6. Export all blocks from plc software 'PC-System_1/Software PLC_1' to 'workspacefolder/Export'
-7. Export all types from plc software 'PC-System_1/Software PLC_1' to 'workspacefolder/Export'
-8. Close the project
-9. Disconnect from tia portal
+- Connect to tia portal and open project from 'D:/Temp/TestProject1.als20'
+- Export all blocks from plc software 'PC-System_1/Software PLC_1' to 'workspacefolder/Export'
+- Export all types from plc software 'PC-System_1/Software PLC_1' to 'workspacefolder/Export'
+- Close the project
+- Disconnect from tia portal
 ```
+
+```
+Do the following steps:
+- Connect to tia portal and open project from 'D:/Temp/TestProject1.als20'
+- Give me the structure of the project as markdown with the exact words
+- Close the project
+- Disconnect from tia portal
+```
+
+```
+Do the following steps:
+- Connect to tia portal and open project from 'D:/Temp/TestProject1.als20'
+- Compile plc software 'PLC_1'
+- Close the project
+- Disconnect from tia portal
+```
+
 ## MCP-Server
 
 - Refer to [tiaportal-mcp](https://github.com/heilingbrunner/tiaportal-mcp) 
