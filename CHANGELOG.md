@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.0.13] - 2025-08-14
+
+- logging integrated
+- prompts added
+
+## [0.0.12] - 2025-08-07
+
+- export path fixed
+
 ## [0.0.11] - 2025-08-07
 
 - project structure formatted as markdown code
