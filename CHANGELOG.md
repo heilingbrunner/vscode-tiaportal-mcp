@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.0.14] - 2025-08-18
+
+- better structure/tree format
+- new GetSoftwareTree()
+- bugfixes
+
 ## [0.0.13] - 2025-08-14
 
 - logging integrated
