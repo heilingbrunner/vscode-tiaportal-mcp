@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.0.15] - 2025-08-30
+
+- prompts improved
+- long running tasks as async tasks
+
 ## [0.0.14] - 2025-08-18
 
 - better structure/tree format
