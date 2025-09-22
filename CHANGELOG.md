@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.0.17] - 2025-09-22
+
+- bugfixes, export path fixed
+
+## [0.0.16] - 2025-09-21
+
+- bugfixes
+- improved eception handling
+
 ## [0.0.15] - 2025-08-30
 
 - prompts improved
