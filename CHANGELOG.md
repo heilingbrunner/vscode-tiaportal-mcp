@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.18] - 2025-09-30
+
+- silent exceptions in Export functions fixed
+
 ## [0.0.17] - 2025-09-22
 
 - bugfixes, export path fixed
