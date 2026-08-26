@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import { spawn, ChildProcess } from 'child_process';
+import { runDiagnostics, showDiagnosticsPanel } from './diagnostics';
 
 interface McpServerConfig {
     command: string;
@@ -53,8 +54,19 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showInformationMessage('Removed TIA Portal MCP server from configuration!');
     });
 
+    const disposableRunDiagnostics = vscode.commands.registerCommand('vscode-tiaportal-mcp.RunDiagnostics', async () => {
+        try {
+            const checks = await runDiagnostics(serverPath);
+            showDiagnosticsPanel(checks);
+        } catch (error) {
+            console.error('Error running TIA Portal diagnostics:', error);
+            vscode.window.showErrorMessage('Failed to run TIA Portal diagnostics.');
+        }
+    });
+
     context.subscriptions.push(disposableAddServerConfiguration);
     context.subscriptions.push(disposableRemoveServerConfiguration);
+    context.subscriptions.push(disposableRunDiagnostics);
 
     updateMcpConfigIfExists(serverPath);
 }

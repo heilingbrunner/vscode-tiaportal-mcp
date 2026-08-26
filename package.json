@@ -7,7 +7,8 @@
     "publisher": "JHeilingbrunner",
     "repository": {
         "type": "git",
-        "url": "https://github.com/heilingbrunner/vscode-tiaportal-mcp.git"},
+        "url": "https://github.com/heilingbrunner/vscode-tiaportal-mcp.git"
+    },
     "displayName": "TIA-Portal MCP-Server",
     "description": "MCP stuff for Siemens TIA-Portal",
     "icon": "assets/vscode-tiaportal-mcp-logo.png",
@@ -41,6 +42,11 @@
             {
                 "command": "vscode-tiaportal-mcp.RemoveServerConfiguration",
                 "title": "Remove MCP Server Configuration",
+                "category": "TIA Portal"
+            },
+            {
+                "command": "vscode-tiaportal-mcp.RunDiagnostics",
+                "title": "Run Diagnostics",
                 "category": "TIA Portal"
             }
         ]
