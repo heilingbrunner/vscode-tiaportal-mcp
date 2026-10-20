@@ -7,7 +7,7 @@
 - existing config files are checked before the client list is shown: configured clients are pre-ticked and their arguments are the default answers
 - JSON files may contain comments and trailing commas (JSONC), TOML may contain comments; they are preserved when the server entry is added, updated or removed
 - `--export-path` is written exactly as entered: relative paths stay relative and `${workspaceFolder}` is not replaced
-- `Add MCP Server Configuration` now asks interactively for the server arguments (`--tia-major-version`, `--project-path`, `--software-path`, `--export-path`, `--preserve-path`) and writes `type: stdio` entry
+- `Add MCP Server Configuration` now asks interactively for the server arguments (`--tia-major-version`, `--project-path`, `--software-path`, `--export-path`, `--preserve-path`, `--allow-write`) and writes `type: stdio` entry; `--allow-write` is only written if you answer `Yes` (default `No`)
 - extension update only refreshes the server `command` in `mcp.json`, user arguments are kept
 - invalid `mcp.json` is no longer overwritten, errors are shown to the user
 - update of [tiaportal-mcp](https://github.com/heilingbrunner/tiaportal-mcp) to the latest version

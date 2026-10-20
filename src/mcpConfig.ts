@@ -10,6 +10,7 @@ export interface TiaServerArgs {
     softwarePath: string;
     exportPath: string;
     preservePath: boolean;
+    allowWrite: boolean;
 }
 
 /** One server entry as it appears in a config file. */
@@ -18,14 +19,21 @@ export type Entry = Record<string, unknown>;
 /** Top-level key holding the servers, e.g. `servers`, `mcpServers`, `mcp` or `context_servers`. */
 export type ServersKey = string;
 
-const OPTION_KEYS: { [option: string]: keyof Omit<TiaServerArgs, 'preservePath'> } = {
+type FlagKey = 'preservePath' | 'allowWrite';
+
+/** Options that take a value. */
+const OPTION_KEYS: { [option: string]: keyof Omit<TiaServerArgs, FlagKey> } = {
     '--tia-major-version': 'tiaMajorVersion',
     '--project-path': 'projectPath',
     '--software-path': 'softwarePath',
     '--export-path': 'exportPath'
 };
 
-const PRESERVE_PATH_OPTION = '--preserve-path';
+/** Options without a value; they are written when true and left out when false. */
+const FLAG_OPTIONS: { [option: string]: FlagKey } = {
+    '--preserve-path': 'preservePath',
+    '--allow-write': 'allowWrite'
+};
 
 export function buildArgs(a: TiaServerArgs): string[] {
     return [
@@ -33,7 +41,7 @@ export function buildArgs(a: TiaServerArgs): string[] {
         '--project-path', a.projectPath,
         '--software-path', a.softwarePath,
         '--export-path', a.exportPath,
-        ...(a.preservePath ? [PRESERVE_PATH_OPTION] : [])
+        ...Object.entries(FLAG_OPTIONS).flatMap(([option, key]) => (a[key] ? [option] : []))
     ];
 }
 
@@ -46,14 +54,16 @@ export function parseArgs(args: readonly string[]): Partial<TiaServerArgs> {
         const key = Object.hasOwn(OPTION_KEYS, option) ? OPTION_KEYS[option] : undefined;
         if (key && i + 1 < args.length && !args[i + 1].startsWith('--')) {
             result[key] = args[++i];
-        } else if (option === PRESERVE_PATH_OPTION) {
-            result.preservePath = true;
+        } else if (Object.hasOwn(FLAG_OPTIONS, option)) {
+            result[FLAG_OPTIONS[option]] = true;
         }
     }
 
-    // A parsed config always has an explicit preserve flag once any other arg is known.
-    if (Object.keys(result).length > 0 && result.preservePath === undefined) {
-        result.preservePath = false;
+    // Once any arg is known, a flag that is absent is known to be off.
+    if (Object.keys(result).length > 0) {
+        for (const key of Object.values(FLAG_OPTIONS)) {
+            result[key] ??= false;
+        }
     }
 
     return result;

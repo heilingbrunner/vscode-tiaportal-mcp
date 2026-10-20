@@ -24,26 +24,42 @@ const sample: TiaServerArgs = {
     projectPath: 'D:\\Siemens\\Sessions\\Proj\\Proj.als21',
     softwarePath: 'PC-System_1/Software PLC_1',
     exportPath: '${workspaceFolder}\\Sources',
-    preservePath: true
+    preservePath: true,
+    allowWrite: true
 };
 
 const entry: Entry = { type: 'stdio', command: 'a.exe', args: ['--x'], env: {} };
 
 describe('buildArgs', () => {
-    it('builds all args including --preserve-path', () => {
+    it('builds all args with --allow-write after --preserve-path', () => {
         assert.deepStrictEqual(buildArgs(sample), [
             '--tia-major-version', '21',
             '--project-path', 'D:\\Siemens\\Sessions\\Proj\\Proj.als21',
             '--software-path', 'PC-System_1/Software PLC_1',
             '--export-path', '${workspaceFolder}\\Sources',
-            '--preserve-path'
+            '--preserve-path',
+            '--allow-write'
         ]);
     });
 
     it('omits --preserve-path when false', () => {
         const args = buildArgs({ ...sample, preservePath: false });
         assert.ok(!args.includes('--preserve-path'));
+        assert.ok(args.includes('--allow-write'));
+        assert.strictEqual(args.length, 9);
+    });
+
+    it('omits --allow-write when false', () => {
+        const args = buildArgs({ ...sample, allowWrite: false });
+        assert.ok(!args.includes('--allow-write'));
+        assert.strictEqual(args[args.length - 1], '--preserve-path');
+        assert.strictEqual(args.length, 9);
+    });
+
+    it('writes no flags when both are false', () => {
+        const args = buildArgs({ ...sample, preservePath: false, allowWrite: false });
         assert.strictEqual(args.length, 8);
+        assert.ok(!args.some(a => a === '--preserve-path' || a === '--allow-write'));
     });
 });
 
@@ -55,6 +71,24 @@ describe('parseArgs', () => {
     it('detects absent --preserve-path as false', () => {
         const parsed = parseArgs(buildArgs({ ...sample, preservePath: false }));
         assert.strictEqual(parsed.preservePath, false);
+    });
+
+    it('reads --allow-write independently of --preserve-path', () => {
+        assert.strictEqual(parseArgs(buildArgs({ ...sample, preservePath: false })).allowWrite, true);
+        assert.strictEqual(parseArgs(buildArgs({ ...sample, preservePath: false })).preservePath, false);
+        assert.strictEqual(parseArgs(buildArgs({ ...sample, allowWrite: false })).allowWrite, false);
+        assert.strictEqual(parseArgs(buildArgs({ ...sample, allowWrite: false })).preservePath, true);
+    });
+
+    it('treats an entry written before --allow-write existed as write access off', () => {
+        const old = ['--tia-major-version', '21', '--project-path', 'P', '--software-path', 'S', '--export-path', 'E', '--preserve-path'];
+        const parsed = parseArgs(old);
+        assert.strictEqual(parsed.allowWrite, false);
+        assert.strictEqual(parsed.preservePath, true);
+    });
+
+    it('knows a lone --allow-write', () => {
+        assert.deepStrictEqual(parseArgs(['--allow-write']), { allowWrite: true, preservePath: false });
     });
 
     it('returns empty object for no args', () => {

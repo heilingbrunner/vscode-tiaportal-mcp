@@ -93,6 +93,7 @@ Notes on single clients:
    3. PLC software path (`--software-path`), e.g. `PC-System_1/Software PLC_1`
    4. Export path (`--export-path`), default `${workspaceFolder}\Project`
    5. Preserve path structure (`--preserve-path`)
+   6. Allow write access to the project (`--allow-write`), default `No`. The flag is only written if you answer `Yes`.
 - Check the written file (GitHub Copilot example below). Other servers and settings in the file are kept.
    - `<user>`: Your Windows username
    - `<version>`: The version of the extension you have installed.
@@ -107,7 +108,8 @@ Notes on single clients:
                     "--project-path", "D:\\Siemens\\Projects\\MyProject\\MyProject.ap21",
                     "--software-path", "PC-System_1/Software PLC_1",
                     "--export-path", "${workspaceFolder}\\Project",
-                    "--preserve-path"
+                    "--preserve-path",
+                    "--allow-write"
                 ],
                 "env": {}
             }

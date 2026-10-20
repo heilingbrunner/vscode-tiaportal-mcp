@@ -24,7 +24,7 @@ async function pickProjectPath(version: string, current: string | undefined): Pr
             ...(current ? [{ label: current, description: 'current' }] : []),
             { label: browse, description: `select a .ap${version} project or .als${version} session` }
         ],
-        { title: 'TIA Portal project path (2/5)', ignoreFocusOut: true }
+        { title: 'TIA Portal project path (2/6)', ignoreFocusOut: true }
     );
     if (!choice) {
         return undefined;
@@ -46,7 +46,7 @@ async function pickProjectPath(version: string, current: string | undefined): Pr
 export async function promptTiaServerArgs(defaults: Partial<TiaServerArgs>): Promise<TiaServerArgs | undefined> {
     const version = (await vscode.window.showQuickPick(
         currentFirst(TIA_MAJOR_VERSIONS, defaults.tiaMajorVersion),
-        { title: 'TIA Portal major version (1/5)', ignoreFocusOut: true }
+        { title: 'TIA Portal major version (1/6)', ignoreFocusOut: true }
     ))?.label;
     if (!version) {
         return undefined;
@@ -58,7 +58,7 @@ export async function promptTiaServerArgs(defaults: Partial<TiaServerArgs>): Pro
     }
 
     const softwarePath = await vscode.window.showInputBox({
-        title: 'PLC software path (3/5)',
+        title: 'PLC software path (3/6)',
         prompt: 'Path of the PLC software in the project tree',
         value: defaults.softwarePath ?? '',
         placeHolder: 'PC-System_1/Software PLC_1',
@@ -70,7 +70,7 @@ export async function promptTiaServerArgs(defaults: Partial<TiaServerArgs>): Pro
     }
 
     const exportPath = await vscode.window.showInputBox({
-        title: 'Export path (4/5)',
+        title: 'Export path (4/6)',
         prompt: 'Folder for exported sources',
         value: defaults.exportPath ?? DEFAULT_EXPORT_PATH,
         validateInput: nonEmpty,
@@ -82,9 +82,18 @@ export async function promptTiaServerArgs(defaults: Partial<TiaServerArgs>): Pro
 
     const preserve = (await vscode.window.showQuickPick(
         currentFirst(['Yes', 'No'], defaults.preservePath === undefined ? undefined : defaults.preservePath ? 'Yes' : 'No'),
-        { title: 'Preserve path structure on export (--preserve-path) (5/5)', ignoreFocusOut: true }
+        { title: 'Preserve path structure on export (--preserve-path) (5/6)', ignoreFocusOut: true }
     ))?.label;
     if (!preserve) {
+        return undefined;
+    }
+
+    // Write access to the TIA Portal project is the riskier choice, so "No" is the default
+    const allowWrite = (await vscode.window.showQuickPick(
+        currentFirst(['No', 'Yes'], defaults.allowWrite === undefined ? undefined : defaults.allowWrite ? 'Yes' : 'No'),
+        { title: 'Allow write access to the project (--allow-write) (6/6)', ignoreFocusOut: true }
+    ))?.label;
+    if (!allowWrite) {
         return undefined;
     }
 
@@ -93,6 +102,7 @@ export async function promptTiaServerArgs(defaults: Partial<TiaServerArgs>): Pro
         projectPath,
         softwarePath: softwarePath.trim(),
         exportPath: exportPath.trim(),
-        preservePath: preserve === 'Yes'
+        preservePath: preserve === 'Yes',
+        allowWrite: allowWrite === 'Yes'
     };
 }
