@@ -7,8 +7,7 @@ import {
     TiaServerArgs,
     buildArgs,
     parseArgs,
-    readTextFile,
-    resolveWorkspaceFolder
+    readTextFile
 } from './mcpConfig';
 import { promptTiaServerArgs } from './prompts';
 import { ALL_TARGETS, CLAUDE_TARGET, COPILOT_TARGET, McpTarget } from './targets';
@@ -201,14 +200,10 @@ function requireWorkspaceFolder(): string {
 function writeMcpConfig(target: McpTarget, serverPath: string, args: TiaServerArgs, workspaceFolder: string): void {
     const configPath = target.configPath(workspaceFolder);
 
-    const serverArgs = target.resolvesWorkspaceFolder
-        ? { ...args, exportPath: resolveWorkspaceFolder(args.exportPath, workspaceFolder) }
-        : args;
-
     // Read right before writing: the file may have been edited while the prompts were open.
     // Edits the text in place, so comments and formatting in the file survive.
     const text = readTextFile(configPath);
-    const newText = inFile(configPath, () => target.upsert(text, serverPath, buildArgs(serverArgs)));
+    const newText = inFile(configPath, () => target.upsert(text, serverPath, buildArgs(args)));
 
     fs.mkdirSync(path.dirname(configPath), { recursive: true });
     fs.writeFileSync(configPath, newText, 'utf8');

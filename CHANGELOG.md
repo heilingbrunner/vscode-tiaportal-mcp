@@ -1,15 +1,16 @@
 # Change Log
 
-## [Unreleased]
+## [0.0.19] - 2026-10-20
 
 - `Add` and `Remove MCP Server Configuration` ask which clients to use, with one checkbox each: `GitHub Copilot` (`.vscode/mcp.json`), `Anthropic Claude` (`.mcp.json`), `Cursor` (`.cursor/mcp.json`) and `OpenAI Codex` (`.codex/config.toml`); only project-scoped files in the workspace folder are used, and only for clients that run in VS Code or a VS Code fork
 - `Add` asks its questions once for all ticked clients; every file is checked before anything is written
 - existing config files are checked before the client list is shown: configured clients are pre-ticked and their arguments are the default answers
 - JSON files may contain comments and trailing commas (JSONC), TOML may contain comments; they are preserved when the server entry is added, updated or removed
-- `${workspaceFolder}` in `--export-path` is replaced by the real path for clients that do not expand it
+- `--export-path` is written exactly as entered: relative paths stay relative and `${workspaceFolder}` is not replaced
 - `Add MCP Server Configuration` now asks interactively for the server arguments (`--tia-major-version`, `--project-path`, `--software-path`, `--export-path`, `--preserve-path`) and writes `type: stdio` entry
 - extension update only refreshes the server `command` in `mcp.json`, user arguments are kept
 - invalid `mcp.json` is no longer overwritten, errors are shown to the user
+- update of [tiaportal-mcp](https://github.com/heilingbrunner/tiaportal-mcp) to the latest version
 
 ## [0.0.18] - 2025-09-30
 

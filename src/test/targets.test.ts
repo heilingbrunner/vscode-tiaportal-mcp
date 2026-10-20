@@ -161,10 +161,16 @@ describe('entry shapes', () => {
     });
 });
 
-describe('workspace folder placeholder', () => {
-    it('is resolved for every client except those that expand it themselves', () => {
-        const resolving = ALL_TARGETS.filter(t => t.resolvesWorkspaceFolder).map(t => t.id);
-        assert.deepStrictEqual(resolving, ['claude', 'codex']);
-        assert.deepStrictEqual(ALL_TARGETS.filter(t => !t.resolvesWorkspaceFolder).map(t => t.id), ['copilot', 'cursor']);
-    });
+describe('export path', () => {
+    const exportPaths = ['Sources', '.\\Sources', '..\\Export', 'out/export', '${workspaceFolder}\\Sources', 'D:\\Absolute\\Export'];
+
+    for (const target of ALL_TARGETS) {
+        it(`${target.label}: is written exactly as entered, relative paths stay relative`, () => {
+            for (const exportPath of exportPaths) {
+                const args = ['--tia-major-version', '21', '--export-path', exportPath, '--preserve-path'];
+                const text = target.upsert(undefined, COMMAND, args);
+                assert.deepStrictEqual(target.existingArgs(text), args, exportPath);
+            }
+        });
+    }
 });

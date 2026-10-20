@@ -10,7 +10,7 @@ A Visual Studio Code extension to connect to Siemens TIA Portal and interact wit
 
 ## Requirements
 
-- __Siemens TIA Portal V20__ installed and running on your machine
+- __Siemens TIA Portal V21__ installed and running on your machine
 - __Siemens.Openness__ installed
 - __net Framework 4.8__ installed
 - __Visual Studio Code__ installed
@@ -79,7 +79,7 @@ These are the clients that run in VS Code or a VS Code fork, where this extensio
 
 Notes on single clients:
 
-- `${workspaceFolder}` is kept for GitHub Copilot and Cursor, which expand it. For Claude and Codex the real workspace path is written instead.
+- The export path is written exactly as you enter it, relative paths stay relative and `${workspaceFolder}` is not replaced. Not every client expands `${workspaceFolder}` (GitHub Copilot and Cursor do), so for Claude and Codex enter a relative path such as `Project` if the placeholder does not work there.
 - Claude Code asks for approval the first time it sees a project-scoped server. Codex only loads `.codex\config.toml` for trusted projects.
 
 #### Add server
@@ -91,7 +91,7 @@ Notes on single clients:
    1. TIA Portal major version (`--tia-major-version`)
    2. Project or session file (`--project-path`)
    3. PLC software path (`--software-path`), e.g. `PC-System_1/Software PLC_1`
-   4. Export path (`--export-path`), default `${workspaceFolder}\Sources`
+   4. Export path (`--export-path`), default `${workspaceFolder}\Project`
    5. Preserve path structure (`--preserve-path`)
 - Check the written file (GitHub Copilot example below). Other servers and settings in the file are kept.
    - `<user>`: Your Windows username
@@ -106,7 +106,7 @@ Notes on single clients:
                     "--tia-major-version", "21",
                     "--project-path", "D:\\Siemens\\Projects\\MyProject\\MyProject.ap21",
                     "--software-path", "PC-System_1/Software PLC_1",
-                    "--export-path", "${workspaceFolder}\\Sources",
+                    "--export-path", "${workspaceFolder}\\Project",
                     "--preserve-path"
                 ],
                 "env": {}
@@ -114,7 +114,7 @@ Notes on single clients:
         }
     }
     ```
-    The Anthropic Claude and Cursor entries look the same under `"mcpServers"` (Cursor has no `"type"` field), and the Claude `--export-path` contains the resolved workspace path.
+    The Anthropic Claude and Cursor entries look the same under `"mcpServers"` (Cursor has no `"type"` field).
 - Comments and trailing commas in the JSON files, and comments in `config.toml`, are allowed and are kept when the entry is added, updated or removed. If a file is not valid JSON or TOML the command stops with an error instead of overwriting it.
 
 #### Use the server

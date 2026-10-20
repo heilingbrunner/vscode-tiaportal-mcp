@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { TiaServerArgs } from './mcpConfig';
 
-const TIA_MAJOR_VERSIONS = ['18', '19', '20', '21'];
-const DEFAULT_EXPORT_PATH = '${workspaceFolder}\\Sources';
+const TIA_MAJOR_VERSIONS = ['19', '20', '21'];
+const DEFAULT_EXPORT_PATH = '${workspaceFolder}\\Project';
 
 function nonEmpty(value: string): string | undefined {
     return value.trim() ? undefined : 'A value is required.';

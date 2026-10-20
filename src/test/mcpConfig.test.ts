@@ -16,8 +16,7 @@ import {
     rawEntry,
     readJsonFile,
     refreshServerCommandText,
-    removeServerEntryText,
-    resolveWorkspaceFolder
+    removeServerEntryText
 } from '../mcpConfig';
 
 const sample: TiaServerArgs = {
@@ -162,19 +161,6 @@ describe('mergeServerEntry', () => {
         const merged = mergeServerEntry(existing, SERVER_NAME, entry, 'mcpServers') as Record<string, unknown>;
         assert.deepStrictEqual(merged.mcpServers, { [SERVER_NAME]: entry });
         assert.deepStrictEqual(merged.servers, existing.servers);
-    });
-});
-
-describe('resolveWorkspaceFolder', () => {
-    it('replaces every placeholder occurrence', () => {
-        assert.strictEqual(
-            resolveWorkspaceFolder('${workspaceFolder}\\Sources;${workspaceFolder}\\x', 'E:\\ws'),
-            'E:\\ws\\Sources;E:\\ws\\x'
-        );
-    });
-
-    it('leaves values without the placeholder unchanged', () => {
-        assert.strictEqual(resolveWorkspaceFolder('D:\\Export', 'E:\\ws'), 'D:\\Export');
     });
 });
 

@@ -30,8 +30,6 @@ export interface McpTarget {
     label: string;
     /** Config file location relative to the workspace folder, for display. */
     relativePath: string[];
-    /** Clients that do not know `${workspaceFolder}` get the real path written instead. */
-    resolvesWorkspaceFolder: boolean;
     /** Absolute path of the config file for a workspace folder. */
     configPath(workspaceFolder: string): string;
     /** Whether the file already has our server entry. Throws if the file is invalid. */
@@ -52,7 +50,6 @@ interface JsonTargetOptions {
     relativePath: string[];
     key: ServersKey;
     format: EntryFormat;
-    resolvesWorkspaceFolder: boolean;
 }
 
 function jsonTarget(o: JsonTargetOptions): McpTarget {
@@ -60,7 +57,6 @@ function jsonTarget(o: JsonTargetOptions): McpTarget {
         id: o.id,
         label: o.label,
         relativePath: o.relativePath,
-        resolvesWorkspaceFolder: o.resolvesWorkspaceFolder,
         configPath: ws => path.join(ws, ...o.relativePath),
         hasEntry: text => rawEntry(parseConfigText(text), SERVER_NAME, o.key) !== undefined,
         existingArgs: text => {
@@ -88,8 +84,7 @@ const COPILOT_TARGET = jsonTarget({
     label: 'GitHub Copilot',
     relativePath: ['.vscode', 'mcp.json'],
     key: 'servers',
-    format: STDIO_FORMAT,
-    resolvesWorkspaceFolder: false
+    format: STDIO_FORMAT
 });
 
 const CLAUDE_TARGET = jsonTarget({
@@ -97,8 +92,7 @@ const CLAUDE_TARGET = jsonTarget({
     label: 'Anthropic Claude',
     relativePath: ['.mcp.json'],
     key: 'mcpServers',
-    format: STDIO_FORMAT,
-    resolvesWorkspaceFolder: true
+    format: STDIO_FORMAT
 });
 
 const CURSOR_TARGET = jsonTarget({
@@ -106,15 +100,13 @@ const CURSOR_TARGET = jsonTarget({
     label: 'Cursor',
     relativePath: ['.cursor', 'mcp.json'],
     key: 'mcpServers',
-    format: PLAIN_FORMAT,
-    resolvesWorkspaceFolder: false // Cursor expands ${workspaceFolder} itself
+    format: PLAIN_FORMAT
 });
 
 const CODEX_TARGET: McpTarget = {
     id: 'codex',
     label: 'OpenAI Codex',
     relativePath: ['.codex', 'config.toml'],
-    resolvesWorkspaceFolder: true,
     configPath: ws => path.join(ws, '.codex', 'config.toml'),
     hasEntry: text => tomlRawEntry(parseTomlText(text), SERVER_NAME) !== undefined,
     existingArgs: text => {

@@ -140,11 +140,6 @@ export function mergeServerEntry(existing: unknown, name: string, entry: Entry, 
     };
 }
 
-/** Replaces the `${workspaceFolder}` placeholder, for clients that do not expand it. */
-export function resolveWorkspaceFolder(value: string, workspaceFolder: string): string {
-    return value.split('${workspaceFolder}').join(workspaceFolder);
-}
-
 // --- Reading and editing the config file text (JSONC: comments and trailing commas are allowed) ---
 
 /**

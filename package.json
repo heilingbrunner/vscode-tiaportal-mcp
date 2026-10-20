@@ -12,7 +12,7 @@
     "displayName": "TIA Portal MCP-Server",
     "description": "MCP stuff for Siemens TIA Portal",
     "icon": "assets/vscode-tiaportal-mcp-logo.png",
-    "version": "0.0.18",
+    "version": "0.0.19",
     "engines": {
         "vscode": "^1.100.0"
     },
