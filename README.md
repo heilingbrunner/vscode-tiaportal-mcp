@@ -64,50 +64,68 @@ Do the following steps:
 
 ## Usage
 
-### Visaul Studio Code
+### Project configuration
 
-#### Add server to `mcp.json`
+The extension only writes project-scoped files in the first workspace folder. User-level files (for example the VS Code user `mcp.json` or `claude_desktop_config.json`) are never touched.
+
+| Client | File in the workspace folder | Format and key |
+|---|---|---|
+| GitHub Copilot | `.vscode\mcp.json` | JSON, `servers` |
+| Anthropic Claude (Claude Code) | `.mcp.json` | JSON, `mcpServers` |
+| Cursor | `.cursor\mcp.json` | JSON, `mcpServers` |
+| OpenAI Codex | `.codex\config.toml` | TOML, `[mcp_servers.vscode-tiaportal-mcp]` |
+
+These are the clients that run in VS Code or a VS Code fork, where this extension can be installed: GitHub Copilot, the Claude Code extension, Cursor and the Codex IDE extension. Cursor installs extensions from Open VSX, so this extension has to be installed there from the `.vsix` file unless it is published on Open VSX.
+
+Notes on single clients:
+
+- `${workspaceFolder}` is kept for GitHub Copilot and Cursor, which expand it. For Claude and Codex the real workspace path is written instead.
+- Claude Code asks for approval the first time it sees a project-scoped server. Codex only loads `.codex\config.toml` for trusted projects.
+
+#### Add server
 
 - After installation restart VS Code.
-- Run the command `TIA Portal: Add MCP Server Configuration` to add mcp server entry to `mcp.json.
-- Check `.vscode\mcp.json` for the correct TIA Portal path.
+- Run the command `TIA Portal: Add MCP Server Configuration` and tick the clients (checkboxes) you want to configure, then press `Enter`. The questions are asked once and the files of all ticked clients are written.
+- Before the list is shown, the extension looks at the config files of all clients. Clients that already contain the server entry are ticked and marked `(already configured)` (in `Remove` as well), and the arguments of the first entry found are the default answers of the questions, even if you tick a different client. A file that cannot be parsed is ignored at this point and reported when you select its client.
+- Answer the prompts (press `Esc` to cancel, nothing is written then). Values from an existing entry are offered as defaults:
+   1. TIA Portal major version (`--tia-major-version`)
+   2. Project or session file (`--project-path`)
+   3. PLC software path (`--software-path`), e.g. `PC-System_1/Software PLC_1`
+   4. Export path (`--export-path`), default `${workspaceFolder}\Sources`
+   5. Preserve path structure (`--preserve-path`)
+- Check the written file (GitHub Copilot example below). Other servers and settings in the file are kept.
    - `<user>`: Your Windows username
    - `<version>`: The version of the extension you have installed.
     ```json
     {
         "servers": {
             "vscode-tiaportal-mcp": {
-            "command": "c:\\Users\\<user>\\.vscode\\extensions\\jheilingbrunner.vscode-tiaportal-mcp-<version>\\srv\\net48\\TiaMcpServer.exe",
-            "args": [],
-            "env": {}
+                "type": "stdio",
+                "command": "c:\\Users\\<user>\\.vscode\\extensions\\jheilingbrunner.vscode-tiaportal-mcp-<version>\\srv\\net48\\TiaMcpServer.exe",
+                "args": [
+                    "--tia-major-version", "21",
+                    "--project-path", "D:\\Siemens\\Projects\\MyProject\\MyProject.ap21",
+                    "--software-path", "PC-System_1/Software PLC_1",
+                    "--export-path", "${workspaceFolder}\\Sources",
+                    "--preserve-path"
+                ],
+                "env": {}
             }
         }
     }
     ```
-- Open GitHub Copilot.
-- Switch to `Agent` mode.
-- Check tools by `Select Tools`
-- Start to chat with TIA Portal.
+    The Anthropic Claude and Cursor entries look the same under `"mcpServers"` (Cursor has no `"type"` field), and the Claude `--export-path` contains the resolved workspace path.
+- Comments and trailing commas in the JSON files, and comments in `config.toml`, are allowed and are kept when the entry is added, updated or removed. If a file is not valid JSON or TOML the command stops with an error instead of overwriting it.
 
-#### Remove server from `mcp.json`
+#### Use the server
 
-- Run the command `TIA Portal: Remove MCP Server Configuration` to remove mcp server entry from `mcp.json`.
+- GitHub Copilot: open GitHub Copilot, switch to `Agent` mode, check the tools by `Select Tools` and start to chat with TIA Portal.
+- Anthropic Claude: start Claude Code in the workspace folder and approve the project-scoped server `vscode-tiaportal-mcp` when asked (check with `/mcp`).
+- Other clients: open the workspace folder in the tool; see its own MCP documentation for listing and enabling servers.
 
-### Claude Desktop
+#### Remove server
 
-Create/Edit to add/remove server to `C:\Users\<user>\AppData\Roaming\Claude\claude_desktop_config.json`:
-
-```
-{
-  "mcpServers": {
-    "vscode-tiaportal-mcp": {
-      "command": "c:\\Users\\<user>\\.vscode\\extensions\\jheilingbrunner.vscode-tiaportal-mcp-<version>\\srv\\net48\\TiaMcpServer.exe",
-      "args": [],
-      "env": {}
-    }
-  }
-}
-```
+- Run the command `TIA Portal: Remove MCP Server Configuration` and tick the clients (checkboxes) to remove the mcp server entry from their config files. The files of clients that are not ticked are not touched.
 
 ## License
 

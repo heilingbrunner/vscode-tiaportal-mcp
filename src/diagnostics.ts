@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import { execSync } from 'child_process';
+import { SERVER_NAME, rawEntry, readJsonFile } from './mcpConfig';
 
 export interface DiagnosticCheck {
     label: string;
@@ -11,7 +12,6 @@ export interface DiagnosticCheck {
     fix?: string;
 }
 
-const SERVER_NAME = 'vscode-tiaportal-mcp';
 const NET48_MIN_RELEASE = 528040;
 
 export async function runDiagnostics(serverPath: string): Promise<DiagnosticCheck[]> {
@@ -123,9 +123,7 @@ function checkMcpConfigured(): DiagnosticCheck {
         };
     }
     try {
-        const configContent = fs.readFileSync(mcpConfigPath, 'utf8');
-        const config = JSON.parse(configContent);
-        const configured = config?.servers?.[SERVER_NAME] != null;
+        const configured = rawEntry(readJsonFile(mcpConfigPath), SERVER_NAME, 'servers') !== undefined;
         return {
             label: 'MCP server configured in workspace',
             passed: configured,
