@@ -9,8 +9,8 @@
         "type": "git",
         "url": "https://github.com/heilingbrunner/vscode-tiaportal-mcp.git"
     },
-    "displayName": "TIA-Portal MCP-Server",
-    "description": "MCP stuff for Siemens TIA-Portal",
+    "displayName": "TIA Portal MCP-Server",
+    "description": "MCP stuff for Siemens TIA Portal",
     "icon": "assets/vscode-tiaportal-mcp-logo.png",
     "version": "0.0.18",
     "engines": {
@@ -21,6 +21,7 @@
     ],
     "keywords": [
         "vscode",
+        "tia",
         "tia-portal",
         "mcp",
         "model-context-protocol",
