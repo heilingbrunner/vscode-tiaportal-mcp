@@ -1,4 +1,4 @@
-# TIA-Portal MCP-Server
+# TIA Portal MCP-Server
 
 ![vscode-tiaportal-mcp-logo](https://raw.githubusercontent.com/heilingbrunner/vscode-tiaportal-mcp/master/assets/vscode-tiaportal-mcp-logo.png)
 
